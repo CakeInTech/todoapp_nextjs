@@ -1,7 +1,6 @@
 import { prisma } from "@/db";
 import { NextResponse } from "next/server";
 
- // GET
 export async function GET(request: Request) {
   try {
     const todos = await prisma.todo.findMany();
@@ -18,7 +17,6 @@ export async function GET(request: Request) {
   }
 }
 
-// POST
 export async function POST(request: Request) {
   try {
     const payload = await request.json();
