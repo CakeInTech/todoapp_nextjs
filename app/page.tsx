@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import TodoList from "./components/TodoList";
 
@@ -7,12 +6,16 @@ type Theme = "light" | "dark";
 
 export default function Home() {
   const [theme, setTheme] = useState<Theme>(
-    (localStorage.getItem("theme") as Theme) || "light"
+    (typeof window !== "undefined" &&
+      (localStorage.getItem("theme") as Theme)) ||
+      "light"
   );
 
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.querySelector("html")?.setAttribute("data-theme", theme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", theme);
+      document.querySelector("html")?.setAttribute("data-theme", theme);
+    }
   }, [theme]);
 
   const toggleTheme = () => {
