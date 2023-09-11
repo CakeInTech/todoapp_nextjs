@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useState } from "react";
 import AddTask from "./AddTask";
 import DeleteTask from "./DeleteTask";
@@ -13,20 +12,7 @@ interface Todo {
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState<string>('All');
-
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === 'All') {
-      return true;
-    } else if (filter === 'Active') {
-      return !todo.complete;
-    } else if (filter === 'Complete') {
-      return todo.complete;
-    }
-    return true;
-  });
-
+  const [filter, setFilter] = useState<string>("All");
 
   const fetchTodos = async () => {
     try {
@@ -82,22 +68,39 @@ const TodoList: React.FC = () => {
     fetchTodos();
   }, []);
 
+  // Check if todos array is empty or undefined before filtering
+  const filteredTodos = todos
+    ? todos.filter((todo) => {
+        if (filter === "All") {
+          return true;
+        } else if (filter === "Active") {
+          return !todo.complete;
+        } else if (filter === "Complete") {
+          return todo.complete;
+        }
+        return true;
+      })
+    : [];
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex items-center justify-between gap-4 w-full">
-  <AddTask fetchTodos={fetchTodos} />
-  <select
-    className="select max-w-xs"
-    value={filter}
-    onChange={(e) => setFilter(e.target.value)}
-  >
-    <option value="All">All</option>
-    <option value="Active">Active</option>
-    <option value="Complete">Complete</option>
-  </select>
-</div>
+        <AddTask fetchTodos={fetchTodos} />
+        <select
+          className="select max-w-xs"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="All">All</option>
+          <option value="Active">Active</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
 
-      <div className="flex-grow overflow-y-auto mb-4" style={{ maxHeight: "64vh" }}>
+      <div
+        className="flex-grow overflow-y-auto mb-4"
+        style={{ maxHeight: "64vh" }}
+      >
         <table className="table">
           <thead>
             <tr>
