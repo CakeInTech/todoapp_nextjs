@@ -6,20 +6,18 @@ import TodoList from "./components/TodoList";
 type Theme = "light" | "dark";
 
 export default function Home() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(
+    (localStorage.getItem("theme") as Theme) || "light"
+  );
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
+    localStorage.setItem("theme", theme);
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme: Theme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.querySelector("html")?.setAttribute("data-theme", newTheme);
   };
 
   return (
